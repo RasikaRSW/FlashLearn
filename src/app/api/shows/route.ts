@@ -15,7 +15,7 @@ export async function GET(request: Request) {
       result = await weaviateClient.graphql
         .get()
         .withClassName('Show')
-        .withFields('title description cover_image genre year type total_seasons total_episodes')
+        .withFields('title description cover_image genre year type total_seasons total_episodes _additional { id }')
         .withNearText({ concepts: [query] })
         .withLimit(limit)
         .do();
@@ -24,7 +24,7 @@ export async function GET(request: Request) {
       result = await weaviateClient.graphql
         .get()
         .withClassName('Show')
-        .withFields('title description cover_image genre year type total_seasons total_episodes')
+        .withFields('title description cover_image genre year type total_seasons total_episodes _additional { id }')
         .withLimit(limit)
         .do();
     }

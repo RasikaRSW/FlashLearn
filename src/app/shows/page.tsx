@@ -5,7 +5,6 @@ import { Show } from '@/types';
 import ShowCard from '@/components/shows/ShowCard';
 import SearchBar from '@/components/shows/SearchBar';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { searchShows } from '@/lib/weaviate/queries';
 
 export default function ShowsPage() {
   const [shows, setShows] = useState<Show[]>([]);
@@ -16,9 +15,14 @@ export default function ShowsPage() {
     const fetchShows = async () => {
       setLoading(true);
       try {
-        const results = await searchShows(searchQuery || 'popular tv shows movies');
-        console.log('Shows data:', results);
-        setShows(results);
+        const params = new URLSearchParams();
+        if (searchQuery) params.set('query', searchQuery);
+        else params.set('query', 'popular tv shows movies');
+
+        const res = await fetch(`/api/shows?${params.toString()}`);
+        const data = await res.json();
+        console.log('Shows data:', data.shows);
+        setShows(data.shows || []);
       } catch (error) {
         console.error('Error fetching shows:', error);
       } finally {

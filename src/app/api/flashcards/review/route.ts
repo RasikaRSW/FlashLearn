@@ -125,8 +125,16 @@ export async function GET(request: Request) {
       };
     });
 
-    console.log(`Returning ${reviewCards.length} review cards`);
-    return NextResponse.json({ flashcards: reviewCards });
+    // Filter out orphaned cards (flashcard IDs that no longer exist in Weaviate)
+    const validCards = reviewCards.filter(card => card.flashcard_details !== null);
+    const orphanedCount = reviewCards.length - validCards.length;
+    
+    if (orphanedCount > 0) {
+      console.log(`⚠️ Filtered out ${orphanedCount} orphaned flashcard(s) (not found in Weaviate)`);
+    }
+
+    console.log(`Returning ${validCards.length} review cards (${orphanedCount} orphaned)`);
+    return NextResponse.json({ flashcards: validCards });
   } catch (error) {
     console.error('Error in review API:', error);
     return NextResponse.json({ flashcards: [] });

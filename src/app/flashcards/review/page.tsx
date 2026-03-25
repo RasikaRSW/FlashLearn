@@ -187,15 +187,15 @@ export default function ReviewPage() {
   const currentCard = cards[currentIndex];
   
   if (!currentCard.flashcard_details) {
+    // Skip cards with missing details (e.g., orphaned from old Weaviate cluster)
+    if (currentIndex < cards.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      setCompleted(true);
+    }
     return (
-      <div className="max-w-2xl mx-auto text-center py-12">
-        <Card className="p-8">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">Error</h2>
-          <p className="text-gray-600 mb-6">Flashcard details not found</p>
-          <Button onClick={() => router.push('/dashboard')}>
-            Go to Dashboard
-          </Button>
-        </Card>
+      <div className="flex justify-center items-center min-h-96">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
   }
