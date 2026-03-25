@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Card, { CardContent } from '../ui/Card';
 import Button from '../ui/Button';
 
@@ -19,6 +19,11 @@ interface FlashcardReviewProps {
 
 export default function FlashcardReview({ flashcard, onReview, onAnswerReveal }: FlashcardReviewProps) {
   const [showAnswer, setShowAnswer] = useState(false);
+
+  // Reset to question side whenever the flashcard changes
+  useEffect(() => {
+    setShowAnswer(false);
+  }, [flashcard.word]);
 
   const handleCardClick = () => {
     // Toggle between question and answer
