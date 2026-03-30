@@ -1,0 +1,5 @@
+{
+  "name": "Flash Learn",
+  "description": "An AI English tutor for real-time voice conversations using Gemini Live API.",
+  "requestFramePermissions": ["microphone"]
+}
